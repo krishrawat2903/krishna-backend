@@ -10,17 +10,15 @@ app.use(cors())
 app.use(express.json())
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false
+    user: process.env.BREVO_USER,
+    pass: process.env.BREVO_PASS
   }
 })
+
 app.get("/", (req, res) => {
   res.send("Backend is running")
 })
@@ -42,8 +40,8 @@ app.post("/api/request", async (req, res) => {
   } = req.body
 
   const businessMail = {
-    from: process.env.EMAIL_USER,
-    to: [process.env.EMAIL_USER, "krishrawat2903@gmail.com"],
+    from: process.env.BREVO_SENDER,
+    to: ["kdbs.solution@gmail.com", "krishrawat2903@gmail.com"],
     subject: "New Building Material Request",
     html: `
       <h2>New Customer Request</h2>
@@ -76,7 +74,7 @@ app.post("/api/request", async (req, res) => {
   }
 
   const customerMail = {
-    from: process.env.EMAIL_USER,
+    from: process.env.BREVO_SENDER,
     to: email,
     subject: "Request Received - Krishna Dream Building Solution",
     html: `
